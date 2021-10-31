@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {User} from "../../models/User";
 
 @Component({
@@ -8,10 +8,17 @@ import {User} from "../../models/User";
 })
 export class UsersComponent implements OnInit {
 
+  user: User = {
+    firstName: '',
+    lastName: '',
+    email: ''
+  };
   users!: User[];
   showExtended: boolean = true;
   loaded: boolean = false;
-  enableAdd: boolean = true;
+  enableAdd: boolean = false;
+  showUserForm: boolean = false;
+  @ViewChild('userForm') form: any;
 
   constructor() {
   }
@@ -19,57 +26,41 @@ export class UsersComponent implements OnInit {
   ngOnInit(): void {
     this.users = [
       {
-        firstName: 'Alexander',
-        lastName: 'Pinheiro',
-        age: 70,
-        address: {
-          street: '50 Main st',
-          cp: '28901',
-          city: 'Madrid'
-        },
+        firstName: 'Alex',
+        lastName: 'Zickler',
+        email: 'alex@xpto.com',
         isActive: true,
-        registered: new Date('01/02/2018 08:30:00')
+        registered: new Date('01/02/2018 08:30:00'),
+        hide: true
       },
       {
         firstName: 'John',
         lastName: 'Smith',
-        age: 27,
-        address: {
-          street: '32 Main st',
-          cp: '28902',
-          city: 'Barcelona'
-        },
+        email: 'john@xpto.com',
         isActive: false,
-        registered: new Date('03/11/2017 06:20:00')
-
+        registered: new Date('03/11/2017 06:20:00'),
+        hide: true
       },
       {
         firstName: 'Pedro',
         lastName: 'Santos',
-        age: 23,
-        address: {
-          street: '21 Main st',
-          cp: '2893',
-          city: 'Valencia'
-        },
+        email: 'pedro@xpto.com',
         isActive: true,
-        registered: new Date('11/02/2016 10:30:00')
+        registered: new Date('11/02/2016 10:30:00'),
+        hide: true
       }
     ];
     this.loaded = true;
-
-    /* this.addUser({
-       firstName: 'Marcio',
-       lastName: 'Neto'
-     });
-
-     */
   }
 
-  addUser(user: User) {
-    this.users.push(user);
+  onSubmit({value, valid}: { value: User, valid: boolean }) {
+    if(!valid){
+      console.log("Is not valid");
+    }else{
+      value.isActive = true;
+      value.registered = new Date();
+      this.users.unshift(value);
+      this.form.reset();
+    }
   }
-
-
-
 }
